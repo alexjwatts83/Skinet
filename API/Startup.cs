@@ -30,6 +30,8 @@ namespace API
             services.AddApplicationServices();
 
             services.AddSwaggerDocumentation();
+
+            services.AddCorsAllowAll();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +48,8 @@ namespace API
             app.UseRouting();
 
             app.UseStaticFiles();
+
+            app.UseCorsAllowAll();
 
             app.UseAuthorization();
 
