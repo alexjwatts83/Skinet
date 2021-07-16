@@ -1,4 +1,6 @@
-﻿namespace API.Errors
+﻿using System;
+
+namespace API.Errors
 {
     public class ApiResponse
     {
@@ -10,6 +12,7 @@
 
         public int StatusCode { get; set; }
         public string Message { get; set; }
+        public DateTime Occured { get; } = DateTime.UtcNow;
 
         private static string GetDefaultMessageForStatusCode(int statusCode)
         {
