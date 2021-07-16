@@ -24,7 +24,7 @@ namespace Infrastructure.Data
                 .ConfigureAwait(false);
         }
 
-        public async Task<IReadOnlyList<T>> ListAllSyncAsync()
+        public async Task<IReadOnlyList<T>> ListAllAsync()
         {
             return await _context
                 .Set<T>()
@@ -32,13 +32,13 @@ namespace Infrastructure.Data
                 .ConfigureAwait(false);
         }
 
-        public async Task<T> GetEntityWithSpecification(ISpecification<T> specification)
+        public async Task<T> GetByIdWithSpecificationAsync(ISpecification<T> specification)
         {
             return await ApplySpecification(specification).FirstOrDefaultAsync()
                                                           .ConfigureAwait(false);
         }
 
-        public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> specification)
+        public async Task<IReadOnlyList<T>> ListAllWithSpecificationAsync(ISpecification<T> specification)
         {
             return await ApplySpecification(specification).ToListAsync()
                                                           .ConfigureAwait(false);
