@@ -1,14 +1,8 @@
-﻿using Core.Entities;
-
-namespace Core.Specifications
+﻿namespace Core.Specifications
 {
-    public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product>
+    public class ProductsWithTypesAndBrandsSpecification : BaseProductSpecification
     {
-        public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productParams) : base(x =>
-                   (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
-                   (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-                   (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
-               )
+        public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productParams) : base(productParams)
         {
             AddIncludes();
 
