@@ -4,6 +4,8 @@ using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces;
 using Core.Specifications;
+using AutoMapper;
+using API.Dtos;
 
 namespace API.Controllers
 {
@@ -14,14 +16,17 @@ namespace API.Controllers
         private readonly IGenericRepository<Product> _productsRepo;
         private readonly IGenericRepository<ProductBrand> _productBrandRepo;
         private readonly IGenericRepository<ProductType> _productTypeRepo;
+        private readonly IMapper _mapper;
 
         public ProductsController(IGenericRepository<Product> productsRepo,
                                   IGenericRepository<ProductBrand> productBrandRepo,
-                                  IGenericRepository<ProductType> productTypeRepo)
+                                  IGenericRepository<ProductType> productTypeRepo,
+                                  IMapper mapper)
         {
             _productsRepo = productsRepo;
             _productBrandRepo = productBrandRepo;
             _productTypeRepo = productTypeRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,16 +35,18 @@ namespace API.Controllers
             var spec = new ProductsWithTypesAndBrandsSpecification();
             var products = await _productsRepo.ListAllWithSpecificationAsync(spec)
                                               .ConfigureAwait(false);
-
-            return Ok(products);
+            var productDtos = _mapper.Map<IReadOnlyList<ProductToReturnDto>>(products);
+            return Ok(productDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductsWithTypesAndBrandsSpecification(id);
-            return Ok(await _productsRepo.GetByIdWithSpecificationAsync(spec)
-                                         .ConfigureAwait(false));
+            var product = await _productsRepo.GetByIdWithSpecificationAsync(spec)
+                                         .ConfigureAwait(false);
+            var productDto = _mapper.Map<ProductToReturnDto>(product);
+            return Ok(productDto);
         }
 
         [HttpGet("brands")]
