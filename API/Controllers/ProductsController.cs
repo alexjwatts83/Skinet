@@ -13,17 +13,23 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _repo;
+        private readonly IGenericRepository<Product> _productsRepo;
+        private readonly IGenericRepository<ProductBrand> _productBrandRepo;
+        private readonly IGenericRepository<ProductType> _productTypeRepo;
 
-        public ProductsController(IProductRepository repo)
+        public ProductsController(IGenericRepository<Product> productsRepo,
+                                  IGenericRepository<ProductBrand> productBrandRepo,
+                                  IGenericRepository<ProductType> productTypeRepo)
         {
-            _repo = repo;
+            _productsRepo = productsRepo;
+            _productBrandRepo = productBrandRepo;
+            _productTypeRepo = productTypeRepo;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            var products = await _repo.GetProductsAsync();
+            var products = await _productsRepo.ListAllSyncAsync().ConfigureAwait(false);
 
             return Ok(products);
         }
@@ -31,19 +37,21 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            return await _repo.GetProductByIdAsync(id);
+            return Ok(await _productsRepo.GetByIdAsync(id).ConfigureAwait(false));
         }
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
-            return Ok(await _repo.GetProductBrandsAsync());
+            var brands = await _productBrandRepo.ListAllSyncAsync().ConfigureAwait(false);
+            return base.Ok(brands);
         }
 
         [HttpGet("types")]
-        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductTypes()
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {
-            return Ok(await _repo.GetProductTypesAsync());
+            var brands = await _productTypeRepo.ListAllSyncAsync().ConfigureAwait(false);
+            return base.Ok(brands);
         }
     }
 }
