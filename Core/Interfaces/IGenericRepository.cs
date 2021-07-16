@@ -11,5 +11,6 @@ namespace Core.Interfaces
         Task<IReadOnlyList<T>> ListAllAsync();
         Task<T> GetByIdWithSpecificationAsync(ISpecification<T> specification);
         Task<IReadOnlyList<T>> ListAllWithSpecificationAsync(ISpecification<T> specification);
+        Task<int> CountAsync(ISpecification<T> spec);
     }
 }
