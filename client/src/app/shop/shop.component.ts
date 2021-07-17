@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IProduct } from '../shared';
+import { ShopService } from './shop.service';
 
 @Component({
   selector: 'app-shop',
@@ -6,10 +8,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-
-  constructor() { }
+  products!: IProduct[];
+  constructor(private shopService: ShopService) { }
 
   ngOnInit(): void {
+    this.getProducts();
   }
-
+  getProducts() {
+    this.shopService.getProducts().subscribe(response => {
+      this.products = response.data;
+      // this.shopParams.pageNumber = response.pageIndex;
+      // this.shopParams.pageSize = response.pageSize;
+      // this.totalCount = response.count;
+    }, error => {
+      console.log(error);
+    })
+  }
 }
