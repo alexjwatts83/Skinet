@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
 
 namespace API
 {
@@ -28,13 +27,7 @@ namespace API
 
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
-            services.AddApplicationServices();
-
-            services.AddSingleton<ConnectionMultiplexer>(conn =>
-            {
-                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("RedisConnection"), ignoreUnknown: true);
-                return ConnectionMultiplexer.Connect(configuration);
-            });
+            services.AddApplicationServices(_config);
 
             services.AddSwaggerDocumentation();
 
