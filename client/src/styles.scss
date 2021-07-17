@@ -5,9 +5,14 @@
   border-radius: 0;
 }
 
+.xng-breadcrumb-list{
+  // color: #fdf0f0;
+}
+
 label.xng-breadcrumb-trail {
   margin-bottom: 0;
-  color: orange;
+  color: inherit;
+  font-weight: 600;
 }
 
 .xng-breadcrumb-separator {
