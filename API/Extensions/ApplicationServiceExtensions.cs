@@ -15,13 +15,16 @@ namespace API.Extensions
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            services.AddScoped<IBasketRepository, BasketRepository>();
+            
 
-            services.AddSingleton<ConnectionMultiplexer>(_ =>
+            services.AddSingleton<IConnectionMultiplexer>(_ =>
             {
                 var configuration = ConfigurationOptions.Parse(config.GetConnectionString("RedisConnection"), ignoreUnknown: true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
+
+            services.AddScoped<IBasketRepository, BasketRepository>();
+
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
