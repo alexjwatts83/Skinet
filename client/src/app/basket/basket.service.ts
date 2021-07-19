@@ -20,6 +20,7 @@ export class BasketService {
   getBasket(id: string) {
     return this.http.get<IBasket>(this.baseUrl + 'basket?id=' + id).pipe(
       map((basket: IBasket) => {
+        console.log({basket: basket});
         this.basketSource.next(basket);
         // this.calculateTotals();
       })
@@ -29,6 +30,7 @@ export class BasketService {
   setBasket(basket: IBasket) {
     return this.http.post<IBasket>(this.baseUrl + 'basket', basket).subscribe(
       (response: IBasket) => {
+        console.log({response: response});
         this.basketSource.next(response);
         // this.calculateTotals();
       },
