@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -18,7 +19,7 @@ export class BasketService {
   private basketTotalSource = new BehaviorSubject<IBasketTotals | null>(null);
   basketTotal$ = this.basketTotalSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) {}
 
   getBasket(id: string) {
     return this.http.get<IBasket>(this.baseUrl + 'basket?id=' + id).pipe(
@@ -43,16 +44,18 @@ export class BasketService {
     );
   }
 
-  getCurrentBasketValue() {
+  getCurrentBasketValue(showError: boolean = true) {
     const basket = this.basketSource.value;
     if(basket!= null) return basket;
-    console.error('Somehow got here');
+    if (showError) {
+      this.toastr.error("Error in getting current basket value");
+    }
     return new Basket();
   }
 
   addItemToBasket(item: IProduct, quantity = 1) {
     const itemToAdd: IBasketItem = this.mapProductItemToBasketItem(item, quantity);
-    const basket = this.getCurrentBasketValue() ?? this.createBasket();
+    const basket = this.getCurrentBasketValue(false) ?? this.createBasket();
     basket.items = this.addOrUpdateItem(basket.items, itemToAdd, quantity);
     this.setBasket(basket);
   }
