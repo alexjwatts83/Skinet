@@ -7,6 +7,7 @@ import { ServerErrorComponent } from './server-error/server-error.component';
 import { TestErrorComponent } from './test-error/test-error.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BreadcrumbModule } from 'xng-breadcrumb';
+import { SharedModule } from '../shared';
 
 @NgModule({
   declarations: [
@@ -15,11 +16,13 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
     NotFoundComponent,
     ServerErrorComponent,
     SectionHeaderComponent,
+    
   ],
   imports: [
     CommonModule,
     RouterModule,
     BreadcrumbModule,
+    SharedModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
