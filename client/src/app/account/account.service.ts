@@ -19,7 +19,7 @@ export class AccountService {
   loadCurrentUser(token: string) {
     if (token == null) {
       this.currentUserSource.next(null);
-      return of(null);
+      return of(false);
     }
 
     let headers = new HttpHeaders();
@@ -31,6 +31,7 @@ export class AccountService {
           localStorage.setItem('token', user.token);
           this.currentUserSource.next(user);
         }
+        return true;
       })
     )
   }
